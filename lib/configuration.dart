@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petcare_application/addpet.dart';
+import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
 import 'package:petcare_application/pref/preference.dart';
 
@@ -86,7 +87,11 @@ class _configurationState extends State<configuration> {
               ListTile(
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
-                  // Aquí puedes manejar la acción cuando se presiona 'Ayuda'
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return FrequentQuestions();
+                      }));
                 },
               ),
             ],

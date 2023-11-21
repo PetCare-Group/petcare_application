@@ -1,56 +1,88 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:petcare_application/addpet.dart';
 import 'package:petcare_application/api/Service.dart';
 import 'package:petcare_application/configuration.dart';
+import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/login.dart';
 import 'package:petcare_application/perfil.dart';
+import 'package:petcare_application/servicedetails.dart';
+import 'package:petcare_application/api/UserService.dart';
 
 class home extends StatefulWidget {
-  const home({super.key});
+  const home({Key? key}) : super(key: key);
 
   @override
   State<home> createState() => _homeState();
 }
 
 class _homeState extends State<home> {
+  final txtDistrito = TextEditingController();
+  List<UserService> services = [];
+  List<UserService> filteredServices = [];
 
-  final txtDistrito=TextEditingController();
-  final txtServicio=TextEditingController();
-  final txtPrecio=TextEditingController();
-  String filterText="";
+  @override
+  void initState() {
+    super.initState();
+    // Cargar servicios cuando el widget se inicialice
+    Service.getUserServices().then((fetchedServices) {
+      setState(() {
+        services = fetchedServices;
+        filteredServices = fetchedServices;
+      });
+    });
+  }
+
+  void filterServices(String enteredText) {
+    List<UserService> results = [];
+    if (enteredText.isEmpty) {
+      results = services;
+    } else {
+      results = services
+          .where((service) =>
+          service.location.toLowerCase().contains(enteredText.toLowerCase()))
+          .toList();
+    }
+
+    // Actualizar la lista de servicios filtrados y reconstruir el widget
+    setState(() {
+      filteredServices = results;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(248, 209, 55, 1),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.menu),
-              onPressed: () { Scaffold.of(context).openDrawer(); },
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             );
           },
         ),
-        title: Text("PetCare", style: TextStyle(
-          color: Color.fromRGBO(44, 52, 62, 1),
-          fontWeight: FontWeight.bold,
-        )),
-    actions: <Widget>[
+        title: Text(
+          "PetCare",
+          style: TextStyle(
+            color: Color.fromRGBO(44, 52, 62, 1),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: <Widget>[
           PopupMenuButton<String>(
             color: Color.fromRGBO(103, 80, 164, 1),
             elevation: 10,
             onSelected: (String result) {
-              if (result == 'Cerrar sesión'){
+              if (result == 'Cerrar sesión') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => login()),
                 );
               }
-              if (result == 'Ver perfil'){
+              if (result == 'Ver perfil') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => perfil()),
@@ -60,32 +92,32 @@ class _homeState extends State<home> {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: 'Ver perfil',
-                child: Text('Ver perfil', style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white
-                )),
+                child: Text('Ver perfil',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
               ),
               const PopupMenuItem<String>(
                 value: 'Cerrar sesión',
-                child: Text('Cerrar sesión', style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                      )),
+                child: Text('Cerrar sesión',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
               ),
             ],
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 21,
-                backgroundImage: NetworkImage('https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2021/05/Goku-nino-hace-cosplay-de-Arale-Naruto-y-Seiya-en-estas-tiernas-imagenes-compartidas-en-Twitter.jpg'),
+                backgroundImage: NetworkImage(
+                    'https://i0.wp.com/codigoespagueti.com/wp-content/uploads/2021/05/Goku-nino-hace-cosplay-de-Arale-Naruto-y-Seiya-en-estas-tiernas-imagenes-compartidas-en-Twitter.jpg'),
               ),
             ),
           ),
         ],
       ),
-
       drawer: Drawer(
         child: Container(
           color: Color.fromRGBO(248, 209, 55, 1),
@@ -96,8 +128,8 @@ class _homeState extends State<home> {
                 height: 100,
                 child: DrawerHeader(
                   child: Image(image: AssetImage("assets/images/logo-menu.png"),),
-                  ),
                 ),
+              ),
 
               ListTile(
                 title: Text('Inicio', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
@@ -128,206 +160,105 @@ class _homeState extends State<home> {
               ListTile(
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
-                  // Aquí puedes manejar la acción cuando se presiona 'Ayuda'
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return FrequentQuestions();
+                      }));
                 },
               ),
             ],
           ),
-        ),),
-
-      body: FutureBuilder(
-        initialData: [],
-        future: Service.getUserServices(),
-        builder: (context, snapshot){
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-        } else {
-        return Column(
+        ),
+      ),
+      body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 30,),
-                Text("Filtros", style: TextStyle(
-                  color: Color.fromRGBO(44, 52, 62, 1),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                )),
-
-                SizedBox(height: 5),
-
-                GestureDetector(
-                  onTap: _showFilterSheet,
-                  child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(16.0),
-
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(4.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(filterText),
-                          Container(child: Icon(Icons.search)),
-                        ],)
-                  ),
-                ),
-
-                SizedBox(height: 40),
-              ],
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: txtDistrito,
+              decoration: InputDecoration(
+                labelText: 'Buscar por distrito',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: filterServices,
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ListView.builder(
-                itemCount: snapshot.data?.length ?? 0,
-                itemBuilder: (context, index) {
-                  if (snapshot.data != null) {
-                    var userservice = snapshot.data![index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        elevation: 5.0,
-                        child: Container(
-                          height: 120,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-
-                                    Container(
-                                      width: 120,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: NetworkImage('https://source.unsplash.com/random/?veterinarian/${index+14}'),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                    ),
-
-
-
-
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('${userservice.user.firstName.toString()} ${userservice.user.lastName.toString()}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.phone, color: Color.fromRGBO(103, 80, 164, 1)),
-                                                Text(': ${userservice.phone.toString()}', style: TextStyle(fontSize: 18)),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.monetization_on, color: Color.fromRGBO(103, 80, 164, 1)),
-                                                Text(': S/. ${userservice.price.toString()}', style: TextStyle(fontSize: 18)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
+            child: ListView.builder(
+              itemCount: filteredServices.length,
+              itemBuilder: (context, index) {
+                var userService = filteredServices[index];
+                return InkWell(
+                  onTap: () {
+                    String imageUrl = 'https://source.unsplash.com/random/?veterinarian/${index + 14}';
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ServiceDetails(
+                          userService: userService,
+                          imageUrl: imageUrl,
                         ),
                       ),
                     );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      height: 120,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 120,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage('https://source.unsplash.com/random/?veterinarian/${index + 14}'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        '${userService.user.firstName} ${userService.user.lastName}',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.phone, color: Color.fromRGBO(103, 80, 164, 1)),
+                                        Text(': ${userService.phone}', style: TextStyle(fontSize: 18)),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.monetization_on, color: Color.fromRGBO(103, 80, 164, 1)),
+                                        Text(': S/. ${userService.price}', style: TextStyle(fontSize: 18)),
+                                      ], // Cierre de Row children
+                                    ), // Cierre de Row
+                                  ], // Cierre de Column children
+                                ), // Cierre de Container
+                              ), // Cierre de Padding
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-
         ],
-        );
-        }
-    } else {
-      return Text("Estado desconocido");
-    }
-        },
-    )
-
+      ),
     );
   }
-
-  void _showFilterSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                controller: txtDistrito,
-                decoration: InputDecoration(
-                  labelText: 'Distrito',
-                ),
-              ),
-              SizedBox(height: 20,),
-              TextFormField(
-                controller: txtServicio,
-                decoration: InputDecoration(
-                  labelText: 'Tipo de Servicio',
-                ),
-              ),
-              SizedBox(height: 20,),
-              TextFormField(
-                controller: txtPrecio,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Precio',
-                ),
-              ),
-              SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    filterText = "${txtDistrito.text} / ${txtServicio.text} / ${txtPrecio.text}";
-                  });
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Color.fromRGBO(44, 52, 62, 1),
-                ),
-                child: Text('Buscar', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
 }
-

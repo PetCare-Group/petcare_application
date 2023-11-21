@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:petcare_application/api/Pet.dart';
+import 'package:petcare_application/api/PetService.dart';
 import 'package:petcare_application/configuration.dart';
+import 'package:petcare_application/formpet.dart';
+import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
+import 'package:petcare_application/petdetails.dart';
 
 class addpet extends StatefulWidget {
   const addpet({super.key});
@@ -81,180 +86,98 @@ class _addpetState extends State<addpet> {
               ListTile(
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
-                  // Aquí puedes manejar la acción cuando se presiona 'Ayuda'
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return FrequentQuestions();
+                      }));
                 },
               ),
             ],
           ),
         ),),
 
-        /*body: FutureBuilder(
-          initialData: [],
-          future: Service.getUserServices(),
-          builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                return Column();
-              }
-            } else {
-              return Text("Estado desconocido");
-            }
-          },
-        )*/
 
-      //lo de abajo colocarlo dps del return del futurebuilder
-
-      /*
-      body: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: ListView.builder(
-            itemCount: snapshot.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              if (snapshot.data != null) {
-                var userservice = snapshot.data![index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
+      body: FutureBuilder<List<Pet>>(
+        future: PetService().fetchPets(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
+            final pets = snapshot.data!;
+            return ListView.builder(
+              itemCount: pets.length,
+              itemBuilder: (context, index) {
+                final pet = pets[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PetDetails(pet: pet)),
+                    ).then((_) {
+                      setState(() {
+                      });
+                    });
+                  },
                   child: Card(
                     elevation: 5.0,
                     child: Container(
                       height: 120,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Column(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-
-                                Container(
-                                  width: 120,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage('https://www.zooplus.es/magazine/wp-content/uploads/2020/10/Adiestrador-de-perros.jpeg'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
+                            Container(
+                              width: 120,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage('https://source.unsplash.com/random/?pets/${index+14}'),
+                                  fit: BoxFit.cover,
                                 ),
-
-
-
-
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                                  child: Container(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${userservice.user.firstName.toString()} ${userservice.user.lastName.toString()}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.phone, color: Color.fromRGBO(103, 80, 164, 1)),
-                                            Text(': ${userservice.phone.toString()}', style: TextStyle(fontSize: 18)),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.monetization_on, color: Color.fromRGBO(103, 80, 164, 1)),
-                                            Text(': S/. ${userservice.price.toString()}', style: TextStyle(fontSize: 18)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 40),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(pet.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                    Text(pet.description, style: TextStyle(fontSize: 18)),
+                                    Text('${pet.edad} años', style: TextStyle(fontSize: 18)),
+                                  ],
                                 ),
-                              ],
-                            )
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
                 );
-              } else {
-                return Container();
-              }
-            },
-          ),
+              },
+            );
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return Text('Estado desconocido');
+            }
+          },
         ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FormPet()),
+          );
+        },
+        elevation: 10,
+        backgroundColor: Color.fromRGBO(248, 209, 55, 1),
+        child: Icon(Icons.add, color: Color.fromRGBO(44, 52, 62, 1)),
       ),
-      */
-
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              elevation: 5.0,
-              child: Container(
-                height: 120,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-
-                          Container(
-                            width: 120,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage('https://www.zooplus.es/magazine/wp-content/uploads/2020/10/Adiestrador-de-perros.jpeg'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                          ),
-
-
-
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('NOMBRE', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                  Row(
-                                    children: [
-                                      Text('RAZA', style: TextStyle(fontSize: 18)),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('EDAD', style: TextStyle(fontSize: 18)),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          FloatingActionButton(onPressed: () {
-
-          },elevation: 10,backgroundColor: Color.fromRGBO(248, 209, 55, 1),child: Icon(Icons.add,color: Color.fromRGBO(44, 52, 62, 1),),),
-        ],
-      ),
-
-
 
 
 
