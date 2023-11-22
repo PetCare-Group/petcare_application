@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 class preference{
+  static final preference _instance = preference._internal();
+  factory preference() => _instance;
+
 
   SharedPreferences? preferencia;
   bool food=false;
@@ -11,6 +16,14 @@ class preference{
   String apellido = "";
   String celular = "";
   String direccion = "";
+
+  preference._internal() {
+    _init();
+  }
+
+  void _init() async {
+    preferencia = await SharedPreferences.getInstance();
+  }
 
   Future<SharedPreferences?> get preferences async{
     if (preferencia==null){
@@ -104,6 +117,32 @@ class preference{
     await limpiarFood();
     await limpiarWalk();
     await limpiarNotification();
+  }
+//EXTRA
+  Future<void> saveAppointmentDetails(Map<String, dynamic> appointmentDetails) async {
+    final prefs = await preferences;
+    List<Map<String, dynamic>> allAppointments = await getAppointmentDetails() ?? [];
+    allAppointments.add(appointmentDetails);
+    await prefs?.setString('appointments', json.encode(allAppointments));
+  }
+
+  Future<List<Map<String, dynamic>>?> getAppointmentDetails() async {
+    final prefs = await preferences;
+    final String? appointmentsJson = prefs?.getString('appointments');
+    if (appointmentsJson != null) {
+      final List<dynamic> jsonDecoded = json.decode(appointmentsJson);
+      return jsonDecoded.cast<Map<String, dynamic>>();
+    }
+    return null;
+  }
+
+  Future<void> removeAppointmentDetailsAtIndex(int index) async {
+    final prefs = await preferences;
+    List<Map<String, dynamic>> allAppointments = await getAppointmentDetails() ?? [];
+    if(index >= 0 && index < allAppointments.length) {
+      allAppointments.removeAt(index);
+      await prefs?.setString('appointments', json.encode(allAppointments));
+    }
   }
 
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petcare_application/addpet.dart';
 import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
+import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/pref/preference.dart';
 
 class configuration extends StatefulWidget {
@@ -82,6 +83,16 @@ class _configurationState extends State<configuration> {
                 title: Text('Configuración', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
 
+                },
+              ),
+              ListTile(
+                title: Text('Mis Servicios', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MyServicesScreen();
+                      }));
                 },
               ),
               ListTile(

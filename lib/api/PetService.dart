@@ -25,10 +25,8 @@ class PetService {
     );
 
     if (response.statusCode == 200) {
-      // Si el servidor devuelve una respuesta OK, decodificamos y procedemos.
       print('Pet created successfully.');
     } else {
-      // Si el servidor no devuelve una respuesta OK, lanzamos un error.
       throw Exception('Failed to create a new pet. Status code: ${response.statusCode}');
     }
   }

@@ -4,6 +4,7 @@ import 'package:petcare_application/api/Service.dart';
 import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/login.dart';
+import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/perfil.dart';
 import 'package:petcare_application/servicedetails.dart';
 import 'package:petcare_application/api/UserService.dart';
@@ -158,6 +159,16 @@ class _homeState extends State<home> {
                 },
               ),
               ListTile(
+                title: Text('Mis Servicios', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MyServicesScreen();
+                      }));
+                },
+              ),
+              ListTile(
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
                   Navigator.push(
@@ -221,8 +232,8 @@ class _homeState extends State<home> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            SizedBox(width: 20), // Espacio entre la imagen y el texto
-                            Expanded( // Envuelve el segundo Container con Expanded
+                            SizedBox(width: 20),
+                            Expanded(
                               child: Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

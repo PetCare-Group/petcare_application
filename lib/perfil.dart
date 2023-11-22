@@ -4,6 +4,7 @@ import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
 import 'package:petcare_application/login.dart';
+import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/pref/preference.dart';
 
 class perfil extends StatefulWidget {
@@ -154,6 +155,16 @@ class _perfilState extends State<perfil> {
                       context,
                       MaterialPageRoute(builder: (BuildContext context){
                         return configuration();
+                      }));
+                },
+              ),
+              ListTile(
+                title: Text('Mis Servicios', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MyServicesScreen();
                       }));
                 },
               ),
@@ -347,7 +358,6 @@ class _perfilState extends State<perfil> {
     ),
 
 
-    // Botón para guardar los datos
     ElevatedButton(
     onPressed: _guardarDatos,
     child: Text('Guardar datos'),

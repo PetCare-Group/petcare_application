@@ -5,6 +5,7 @@ import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/formpet.dart';
 import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
+import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/petdetails.dart';
 
 class addpet extends StatefulWidget {
@@ -84,6 +85,16 @@ class _addpetState extends State<addpet> {
                 },
               ),
               ListTile(
+                title: Text('Mis Servicios', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MyServicesScreen();
+                      }));
+                },
+              ),
+              ListTile(
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
                   Navigator.push(
@@ -111,12 +122,12 @@ class _addpetState extends State<addpet> {
                 final pet = pets[index];
                 return GestureDetector(
                   onTap: () {
+                    String imageUrl = 'https://source.unsplash.com/random/?pets/${index+14}';
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PetDetails(pet: pet)),
+                      MaterialPageRoute(builder: (context) => PetDetails(pet: pet, imageUrl: imageUrl)),
                     ).then((_) {
-                      setState(() {
-                      });
+                      setState(() {});
                     });
                   },
                   child: Card(
