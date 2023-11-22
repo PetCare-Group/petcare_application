@@ -13,4 +13,21 @@ class ReviewService {
       throw Exception('Failed to load reviews');
     }
   }
+  static Future<void> createReview({required int serviceId, required String description, required int stars, int? userId}) async {
+    final response = await http.post(
+      Uri.parse('https://petcarebackend.azurewebsites.net/api/v1/reviews'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'Description': description,
+        'Stars': stars,
+        'UserId': userId,
+        'ServiceId': serviceId,
+      }),
+    );
+
+    if (response.statusCode < 200 || response.statusCode > 299) {
+      throw Exception('Failed to create review. Status code: ${response.statusCode}');
+    }
+  }
+
 }

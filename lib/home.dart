@@ -205,9 +205,8 @@ class _homeState extends State<home> {
                   child: Card(
                     elevation: 5.0,
                     child: Container(
-                      height: 120,
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -222,15 +221,16 @@ class _homeState extends State<home> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                            SizedBox(width: 20), // Espacio entre la imagen y el texto
+                            Expanded( // Envuelve el segundo Container con Expanded
                               child: Container(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        '${userService.user.firstName} ${userService.user.lastName}',
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                                      '${userService.user.firstName} ${userService.user.lastName}',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis, // Añade esto para prevenir desbordamiento
                                     ),
                                     Row(
                                       children: [
@@ -240,13 +240,25 @@ class _homeState extends State<home> {
                                     ),
                                     Row(
                                       children: [
+                                        Icon(Icons.location_on_outlined, color: Color.fromRGBO(103, 80, 164, 1)),
+                                        Flexible( // Añade el widget Flexible aquí
+                                          child: Text(
+                                            ': ${userService.location}',
+                                            style: TextStyle(fontSize: 18),
+                                            overflow: TextOverflow.ellipsis, // Añade esto para prevenir desbordamiento
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
                                         Icon(Icons.monetization_on, color: Color.fromRGBO(103, 80, 164, 1)),
                                         Text(': S/. ${userService.price}', style: TextStyle(fontSize: 18)),
-                                      ], // Cierre de Row children
-                                    ), // Cierre de Row
-                                  ], // Cierre de Column children
-                                ), // Cierre de Container
-                              ), // Cierre de Padding
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
