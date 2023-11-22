@@ -4,6 +4,7 @@ import 'package:petcare_application/api/Question.dart';
 import 'package:petcare_application/api/QuestionService.dart';
 import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/home.dart';
+import 'package:petcare_application/myservices.dart';
 
 class FrequentQuestions extends StatefulWidget {
   const FrequentQuestions({Key? key}) : super(key: key);
@@ -115,6 +116,16 @@ class _FrequentQuestionsState extends State<FrequentQuestions> {
                       context,
                       MaterialPageRoute(builder: (BuildContext context){
                         return configuration();
+                      }));
+                },
+              ),
+              ListTile(
+                title: Text('Mis Servicios', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return MyServicesScreen();
                       }));
                 },
               ),
