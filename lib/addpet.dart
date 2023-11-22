@@ -122,7 +122,6 @@ class _addpetState extends State<addpet> {
                   child: Card(
                     elevation: 5.0,
                     child: Container(
-                      height: 120,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(

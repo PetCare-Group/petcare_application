@@ -4,7 +4,7 @@ import 'Pet.dart';
 
 class PetService {
   Future<List<Pet>> fetchPets() async {
-    final response = await http.get(Uri.parse('https://petcarebackend.azurewebsites.net/api/v1/pet'));
+    final response = await http.get(Uri.parse('https://petcarebackend.azurewebsites.net/api/v1/pet/1/pet'));
 
     if (response.statusCode == 200) {
       List<dynamic> petsJson = json.decode(response.body);
@@ -15,7 +15,7 @@ class PetService {
   }
 
   Future<void> addPet(Map<String, dynamic> newPet) async {
-    final url = Uri.parse('https://petcarebackend.azurewebsites.net/api/v1/pet');
+    final url = Uri.parse('https://petcarebackend.azurewebsites.net/api/v1/pet/1/pet');
     final response = await http.post(
       url,
       headers: <String, String>{

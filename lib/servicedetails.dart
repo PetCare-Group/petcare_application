@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petcare_application/addcomment.dart';
 import 'package:petcare_application/api/UserService.dart';
 import 'package:petcare_application/api/Review.dart';
 import 'package:petcare_application/api/ReviewService.dart';
@@ -30,6 +31,26 @@ class _ServiceDetailsState extends State<ServiceDetails> {
         title: Text('Detalles del Servicio'),
         backgroundColor: Color.fromRGBO(248, 209, 55, 1),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.message),
+        onPressed: () async {
+          // Usa 'await' para esperar que 'AddCommentScreen' regrese un resultado
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddCommentScreen(serviceId: widget.userService.serviceId),
+            ),
+          );
+
+          // Si 'AddCommentScreen' devuelve 'true', recarga las reseñas
+          if (result == true) {
+            setState(() {
+              futureReviews = ReviewService.fetchReviewsByService(widget.userService.serviceId);
+            });
+          }
+        },
+      ),
+
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
