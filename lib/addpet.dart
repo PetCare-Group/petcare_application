@@ -7,6 +7,7 @@ import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
 import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/petdetails.dart';
+import 'package:petcare_application/termsandconditions.dart';
 
 class addpet extends StatefulWidget {
   const addpet({super.key});
@@ -101,6 +102,16 @@ class _addpetState extends State<addpet> {
                       context,
                       MaterialPageRoute(builder: (BuildContext context){
                         return FrequentQuestions();
+                      }));
+                },
+              ),
+              ListTile(
+                title: Text('Términos y Condiciones', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return TermsAndConditionsScreen();
                       }));
                 },
               ),

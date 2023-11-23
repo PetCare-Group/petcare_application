@@ -4,6 +4,7 @@ import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/frequentquestions.dart';
 import 'package:petcare_application/home.dart';
 import 'package:petcare_application/pref/preference.dart';
+import 'package:petcare_application/termsandconditions.dart';
 
 class MyServicesScreen extends StatefulWidget {
   @override
@@ -121,6 +122,16 @@ class _MyServicesScreenState extends State<MyServicesScreen> {
                       }));
                 },
               ),
+              ListTile(
+                title: Text('Términos y Condiciones', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return TermsAndConditionsScreen();
+                      }));
+                },
+              ),
             ],
           ),
         ),),
@@ -130,7 +141,6 @@ class _MyServicesScreenState extends State<MyServicesScreen> {
           final appointment = appointments[index];
           return Dismissible(
             key: Key(appointment['date']),
-            // Asegúrate de que la clave sea única para cada elemento de la lista.
             background: Container(
               color: Colors.red,
               alignment: Alignment.centerRight,
@@ -139,12 +149,9 @@ class _MyServicesScreenState extends State<MyServicesScreen> {
             ),
             direction: DismissDirection.endToStart,
             onDismissed: (direction) {
-              // Aquí podrías actualizar tu estado para remover el item de la lista.
               setState(() {
                 appointments.removeAt(index);
               });
-              // Aquí deberías también actualizar tus preferencias para remover el elemento.
-              // Por ejemplo: await preference().removeAppointmentDetailsAtIndex(index);
             },
             confirmDismiss: (DismissDirection direction) async {
               return await showDialog(
