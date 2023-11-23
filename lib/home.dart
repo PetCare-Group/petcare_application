@@ -8,6 +8,7 @@ import 'package:petcare_application/myservices.dart';
 import 'package:petcare_application/perfil.dart';
 import 'package:petcare_application/servicedetails.dart';
 import 'package:petcare_application/api/UserService.dart';
+import 'package:petcare_application/termsandconditions.dart';
 
 class home extends StatefulWidget {
   const home({Key? key}) : super(key: key);
@@ -24,7 +25,6 @@ class _homeState extends State<home> {
   @override
   void initState() {
     super.initState();
-    // Cargar servicios cuando el widget se inicialice
     Service.getUserServices().then((fetchedServices) {
       setState(() {
         services = fetchedServices;
@@ -44,7 +44,6 @@ class _homeState extends State<home> {
           .toList();
     }
 
-    // Actualizar la lista de servicios filtrados y reconstruir el widget
     setState(() {
       filteredServices = results;
     });
@@ -175,6 +174,16 @@ class _homeState extends State<home> {
                       context,
                       MaterialPageRoute(builder: (BuildContext context){
                         return FrequentQuestions();
+                      }));
+                },
+              ),
+              ListTile(
+                title: Text('Términos y Condiciones', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return TermsAndConditionsScreen();
                       }));
                 },
               ),

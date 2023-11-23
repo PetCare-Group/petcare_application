@@ -5,6 +5,7 @@ import 'package:petcare_application/api/QuestionService.dart';
 import 'package:petcare_application/configuration.dart';
 import 'package:petcare_application/home.dart';
 import 'package:petcare_application/myservices.dart';
+import 'package:petcare_application/termsandconditions.dart';
 
 class FrequentQuestions extends StatefulWidget {
   const FrequentQuestions({Key? key}) : super(key: key);
@@ -133,6 +134,16 @@ class _FrequentQuestionsState extends State<FrequentQuestions> {
                 title: Text('Ayuda', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
                 onTap: () {
 
+                },
+              ),
+              ListTile(
+                title: Text('Términos y Condiciones', style: TextStyle(color: Color.fromRGBO(44, 52, 62, 1))),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context){
+                        return TermsAndConditionsScreen();
+                      }));
                 },
               ),
             ],

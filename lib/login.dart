@@ -112,7 +112,7 @@ class _loginState extends State<login> {
                 height: 42,
                 child: ElevatedButton(onPressed: (){
 
-                  if((txtMail.text=="hiro@gmail.com" && txtPass.text=="hola123")||(txtMail.text=="xd@gmail.com" && txtPass.text=="chau123")){
+                  if((txtMail.text=="hiro@gmail.com" && txtPass.text=="hola123")||(txtMail.text=="xd@gmail.com" && txtPass.text=="chau123")||(txtMail.text=="eduardo@gmail.com" && txtPass.text=="eduardo")){
                     if(isCheckbox==true){
                       pref.user=txtMail.text.toString();
                       pref.guardarUser();
